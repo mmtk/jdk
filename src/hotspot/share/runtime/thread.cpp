@@ -160,6 +160,10 @@ void Thread::initialize_thread_current() {
 #endif
   assert(ThreadLocalStorage::thread() == NULL, "ThreadLocalStorage::thread already initialized");
   ThreadLocalStorage::set_thread(this);
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+  if (UseThirdPartyHeap)
+    third_party_heap_mutator = third_party_heap::MutatorContext::bind(current());
+#endif
   assert(Thread::current() == ThreadLocalStorage::thread(), "TLS mismatch!");
 }
 

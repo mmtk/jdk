@@ -192,6 +192,7 @@ class CollectedHeap : public CHeapObj<mtGC> {
     G1,
     Epsilon,
     Z,
+    ThirdPartyHeap,
     Shenandoah
   };
 
@@ -240,12 +241,18 @@ class CollectedHeap : public CHeapObj<mtGC> {
   // This is the correct place to place such initialization methods.
   virtual void post_initialize();
 
+  // Notify the heap that now collection is allowed.
+  // This is added for third party heap to avoid a third party heap starts any collection attempt
+  // before the VM is ready.
+  virtual void enable_collection() {}
+
   // Stop any onging concurrent work and prepare for exit.
   virtual void stop() {}
 
   // Stop and resume concurrent GC threads interfering with safepoint operations
   virtual void safepoint_synchronize_begin() {}
   virtual void safepoint_synchronize_end() {}
+  virtual void report_java_thread_yield(JavaThread* thread) {}
 
   void initialize_reserved_region(const ReservedHeapSpace& rs);
 

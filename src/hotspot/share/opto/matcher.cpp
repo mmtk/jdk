@@ -45,6 +45,10 @@
 #include "runtime/sharedRuntime.hpp"
 #include "utilities/align.hpp"
 
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+#include THIRD_PARTY_HEAP_FILE(thirdPartyHeapBarrierSet.hpp)
+#endif // INCLUDE_THIRD_PARTY_HEAP
+
 OptoReg::Name OptoReg::c_frame_pointer;
 
 const RegMask *Matcher::idealreg2regmask[_last_machine_leaf];
@@ -2282,6 +2286,16 @@ bool Matcher::find_shared_visit(MStack& mstack, Node* n, uint opcode, bool& mem_
     case Op_SafePoint:
       mem_op = true;
       break;
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+    case Op_CallLeaf:
+      if (UseThirdPartyHeap) {
+        if (ThirdPartyHeapBarrierSet::is_slow_path_call(n->as_Call()->entry_point())) {
+          mem_op = true;
+          mem_addr_idx = TypeFunc::Parms+1;
+        }
+        break;
+      }
+#endif
     default:
       if( n->is_Store() ) {
         // Do match stores, despite no ideal reg

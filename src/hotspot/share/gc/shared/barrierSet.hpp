@@ -26,6 +26,7 @@
 #define SHARE_GC_SHARED_BARRIERSET_HPP
 
 #include "gc/shared/barrierSetConfig.hpp"
+#include "gc/shared/gc_globals.hpp"
 #include "memory/memRegion.hpp"
 #include "oops/access.hpp"
 #include "oops/accessBackend.hpp"
@@ -310,7 +311,7 @@ public:
 
 template<typename T>
 inline T* barrier_set_cast(BarrierSet* bs) {
-  assert(bs->is_a(BarrierSet::GetName<T>::value), "wrong type of barrier set");
+  assert(UseThirdPartyHeap || bs->is_a(BarrierSet::GetName<T>::value), "wrong type of barrier set");
   return static_cast<T*>(bs);
 }
 

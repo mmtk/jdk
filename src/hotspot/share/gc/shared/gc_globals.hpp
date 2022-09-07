@@ -110,6 +110,12 @@
                                                                             \
   /* gc */                                                                  \
                                                                             \
+  product(bool, UseThirdPartyHeap, false,                                   \
+          "Use the thrtd-party heap for allocation and garbage collection") \
+                                                                            \
+  product(ccstr, ThirdPartyHeapOptions, NULL,                               \
+          "Options for third party heap")                                   \
+                                                                            \
   product(bool, UseSerialGC, false,                                         \
           "Use the Serial garbage collector")                               \
                                                                             \
