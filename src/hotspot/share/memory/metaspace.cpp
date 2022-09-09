@@ -907,6 +907,9 @@ MetaWord* Metaspace::allocate(ClassLoaderData* loader_data, size_t word_size,
   MetaWord* result = allocate(loader_data, word_size, type);
 
   if (result == NULL) {
+    if (UseThirdPartyHeap) {
+      assert(false, "MMTk/OpenJDK dones't support metaspace GC");
+    }
     MetadataType mdtype = (type == MetaspaceObj::ClassType) ? ClassType : NonClassType;
     tracer()->report_metaspace_allocation_failure(loader_data, word_size, type, mdtype);
 
