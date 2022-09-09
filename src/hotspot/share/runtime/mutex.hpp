@@ -68,6 +68,7 @@ class Mutex : public CHeapObj<mtSynchronizer> {
   static const Rank service        = Rank::service;
   static const Rank stackwatermark = Rank::stackwatermark;
   static const Rank tty            = Rank::tty;
+  static const Rank suspend_resume = Rank::suspend_resume;
   static const Rank oopstorage     = Rank::oopstorage;
   static const Rank nosafepoint    = Rank::nosafepoint;
   static const Rank safepoint      = Rank::safepoint;
