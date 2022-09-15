@@ -769,6 +769,7 @@ jint universe_init() {
   if (status != JNI_OK) {
     return status;
   }
+  Thread::current()->post_heap_initialize();
 
   Universe::initialize_tlab();
 
