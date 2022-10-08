@@ -3414,8 +3414,12 @@ void TemplateTable::_new() {
   //    Exit.
   //  Go to slow path.
 
-  if (UseTLAB) {
-    __ tlab_allocate(x10, x13, 0, noreg, x11, slow_case);
+  if (UseTLAB || UseThirdPartyHeap) {
+    if (UseTLAB) {
+      __ tlab_allocate(x10, x13, 0, noreg, x11, slow_case);
+    } else {
+      __ eden_allocate(x10, x13, 0, noreg, x11, slow_case);
+    }
 
     if (ZeroTLAB) {
       // the fields have been already cleared

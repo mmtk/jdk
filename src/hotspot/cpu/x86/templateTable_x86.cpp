@@ -3956,9 +3956,14 @@ void TemplateTable::_new() {
 
   const Register thread = LP64_ONLY(r15_thread) NOT_LP64(rcx);
 
-  if (UseTLAB) {
+  if (UseTLAB || UseThirdPartyHeap) {
     NOT_LP64(__ get_thread(thread);)
-    __ tlab_allocate(thread, rax, rdx, 0, rcx, rbx, slow_case);
+    if (UseTLAB) {
+      __ tlab_allocate(thread, rax, rdx, 0, rcx, rbx, slow_case);
+    }
+    else {
+      __ eden_allocate(thread, rax, rdx, 0, rcx, slow_case);
+    }
     if (ZeroTLAB) {
       // the fields have been already cleared
       __ jmp(initialize_header);
