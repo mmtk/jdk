@@ -1051,6 +1051,7 @@ void TemplateTable::aastore() {
   __ shadd(x14, x14, x13, x14, LogBytesPerHeapOop);
 
   Address element_address(x14, 0);
+  element_address._obj_start = x13;
 
   // do array store check - check for NULL value first
   __ beqz(x10, is_null);
@@ -2619,8 +2620,9 @@ void TemplateTable::putfield_or_static(int byte_no, bool is_static, RewriteContr
       pop_and_check_object(obj);
     }
     __ add(off, obj, off); // if static, obj from cache, else obj from stack.
-    const Address field(off, 0);
+    Address field(off, 0);
     // Store into the field
+    field._obj_start = obj;
     do_oop_store(_masm, field, x10, IN_HEAP);
     if (rc == may_rewrite) {
       patch_bytecode(Bytecodes::_fast_aputfield, bc, x11, true, byte_no);
@@ -2872,7 +2874,8 @@ void TemplateTable::fast_storefield(TosState state) {
 
   // field address
   __ add(x11, x12, x11);
-  const Address field(x11, 0);
+  Address field(x11, 0);
+  field._obj_start = x12;
 
   // access field
   switch (bytecode()) {

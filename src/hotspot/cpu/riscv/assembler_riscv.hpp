@@ -154,6 +154,7 @@ class Address {
  public:
 
   enum mode { no_mode, base_plus_offset, pcrel, literal };
+  Register _obj_start = noreg;
 
  private:
   Register _base;
