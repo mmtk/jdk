@@ -1201,7 +1201,7 @@ void PhaseMacroExpand::expand_allocate_common(
 {
 #ifdef INCLUDE_THIRD_PARTY_HEAP
   if (UseThirdPartyHeap) {
-    ThirdPartyHeapBarrierSetC2::expand_allocate(this, alloc, length, slow_call_type, slow_call_address);
+    ThirdPartyHeapBarrierSetC2::expand_allocate(this, alloc, length, slow_call_type, slow_call_address, valid_length_test);
     return;
   }
 #endif
