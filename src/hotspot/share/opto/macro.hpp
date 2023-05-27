@@ -33,8 +33,15 @@ class  CallNode;
 class  SubTypeCheckNode;
 class  Node;
 class  PhaseIterGVN;
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+#include THIRD_PARTY_HEAP_FILE(thirdPartyHeapBarrierSetC2.hpp)
+#endif
 
 class PhaseMacroExpand : public Phase {
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+  friend ThirdPartyHeapBarrierSetC2;
+#endif
+
 private:
   PhaseIterGVN &_igvn;
 

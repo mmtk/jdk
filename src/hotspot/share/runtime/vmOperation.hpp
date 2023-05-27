@@ -116,7 +116,8 @@
   template(GTestStopSafepoint)                    \
   template(JFROldObject)                          \
   template(JvmtiPostObjectFree)                   \
-  template(RendezvousGCThreads)
+  template(RendezvousGCThreads)                   \
+  THIRD_PARTY_HEAP_ONLY(template(ThirdPartyHeapOperation))
 
 class Thread;
 class outputStream;

@@ -58,6 +58,9 @@
 #if INCLUDE_G1GC
 #include "gc/g1/g1ThreadLocalData.hpp"
 #endif // INCLUDE_G1GC
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+#include THIRD_PARTY_HEAP_FILE(mmtkBarrierSetC2.hpp)
+#endif
 
 
 //
@@ -1193,6 +1196,13 @@ void PhaseMacroExpand::expand_allocate_common(
             Node* valid_length_test // whether length is valid or not
     )
 {
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+  if (UseThirdPartyHeap) {
+    ThirdPartyHeapBarrierSetC2::expand_allocate(this, alloc, length, slow_call_type, slow_call_address, valid_length_test);
+    return;
+  }
+#endif
+
   Node* ctrl = alloc->in(TypeFunc::Control);
   Node* mem  = alloc->in(TypeFunc::Memory);
   Node* i_o  = alloc->in(TypeFunc::I_O);

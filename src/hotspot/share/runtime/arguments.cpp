@@ -69,7 +69,9 @@
 #if INCLUDE_JFR
 #include "jfr/jfr.hpp"
 #endif
-
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+#include THIRD_PARTY_HEAP_FILE(thirdPartyHeap.hpp)
+#endif
 #include <limits>
 
 static const char _default_java_launcher[] = "generic";
@@ -2271,6 +2273,8 @@ jint Arguments::parse_each_vm_init_arg(const JavaVMInitArgs* args, bool* patch_m
     // -da / -ea / -disableassertions / -enableassertions
     // These accept an optional class/package name separated by a colon, e.g.,
     // -da:java.lang.Thread.
+    } else if (match_option(option, "-XX:+UseThirdPartyHeap")) {
+      FLAG_SET_DEFAULT(UseThirdPartyHeap, true);
     } else if (match_option(option, user_assertion_options, &tail, true)) {
       bool enable = option->optionString[1] == 'e';     // char after '-' is 'e'
       if (*tail == '\0') {
@@ -2550,6 +2554,10 @@ jint Arguments::parse_each_vm_init_arg(const JavaVMInitArgs* args, bool* patch_m
     } else if (match_option(option, "-Xinternalversion")) {
       jio_fprintf(defaultStream::output_stream(), "%s\n",
                   VM_Version::internal_vm_info_string());
+      #ifdef INCLUDE_THIRD_PARTY_HEAP
+      jio_fprintf(defaultStream::output_stream(), "%s\n",
+                  ThirdPartyHeap::version());
+      #endif
       vm_exit(0);
 #ifndef PRODUCT
     // -Xprintflags

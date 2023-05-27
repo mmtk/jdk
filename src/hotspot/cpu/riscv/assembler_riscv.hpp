@@ -158,6 +158,7 @@ class Address {
  public:
 
   enum mode { no_mode, base_plus_offset, literal };
+  Register _obj_start = noreg;
 
  private:
   struct Nonliteral {

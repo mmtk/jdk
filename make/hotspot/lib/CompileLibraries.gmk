@@ -31,6 +31,10 @@ include JdkNativeCompilation.gmk
 
 include HotspotCommon.gmk
 
+ifdef THIRD_PARTY_HEAP
+  include $(THIRD_PARTY_HEAP)/CompileThirdPartyHeap.gmk
+endif
+
 include lib/CompileJvm.gmk
 
 ifneq ($(GTEST_FRAMEWORK_SRC), )

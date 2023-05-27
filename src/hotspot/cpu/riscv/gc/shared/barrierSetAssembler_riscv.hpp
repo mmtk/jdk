@@ -48,7 +48,7 @@ public:
   virtual void arraycopy_prologue(MacroAssembler* masm, DecoratorSet decorators, bool is_oop,
                                   Register src, Register dst, Register count, RegSet saved_regs) {}
   virtual void arraycopy_epilogue(MacroAssembler* masm, DecoratorSet decorators, bool is_oop,
-                                  Register start, Register count, Register tmp, RegSet saved_regs) {}
+                                  Register src, Register dst, Register tmp, RegSet saved_regs) {}
 
   virtual void copy_load_at(MacroAssembler* masm,
                             DecoratorSet decorators,
@@ -87,6 +87,18 @@ public:
     Label&   slow_case,                // continuation point if fast allocation fails
     bool is_far = false
   );
+
+  virtual void eden_allocate(MacroAssembler* masm,
+    Register obj,                      // result: pointer to object after successful allocation
+    Register var_size_in_bytes,        // object size in bytes if unknown at compile time; invalid otherwise
+    int      con_size_in_bytes,        // object size in bytes if   known at compile time
+    Register tmp1,                     // temp register
+    Register tmp2,                     // temp register
+    Label&   slow_case,                // continuation point if fast allocation fails
+    bool is_far = false
+  ) {
+    assert(false, "To be overriden by MMTk");
+  }
 
   virtual void barrier_stubs_init() {}
 

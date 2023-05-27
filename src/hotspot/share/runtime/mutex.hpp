@@ -57,6 +57,7 @@ class Mutex : public CHeapObj<mtSynchronizer> {
        service        = event          +   6,
        stackwatermark = service        +   3,
        tty            = stackwatermark +   3,
+       suspend_resume = tty            +   1,
        oopstorage     = tty            +   3,
        nosafepoint    = oopstorage     +   6,
        safepoint      = nosafepoint    +  20
@@ -67,6 +68,7 @@ class Mutex : public CHeapObj<mtSynchronizer> {
   static const Rank service        = Rank::service;
   static const Rank stackwatermark = Rank::stackwatermark;
   static const Rank tty            = Rank::tty;
+  static const Rank suspend_resume = Rank::suspend_resume;
   static const Rank oopstorage     = Rank::oopstorage;
   static const Rank nosafepoint    = Rank::nosafepoint;
   static const Rank safepoint      = Rank::safepoint;

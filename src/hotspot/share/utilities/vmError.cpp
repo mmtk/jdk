@@ -69,6 +69,9 @@
 #if INCLUDE_JFR
 #include "jfr/jfr.hpp"
 #endif
+#ifdef INCLUDE_THIRD_PARTY_HEAP
+#include THIRD_PARTY_HEAP_FILE(thirdPartyHeap.hpp)
+#endif
 #if INCLUDE_JVMCI
 #include "jvmci/jvmci.hpp"
 #endif
@@ -1265,6 +1268,9 @@ void VMError::report(outputStream* st, bool _verbose) {
 
   STEP_IF("printing internal vm info", _verbose)
     st->print_cr("vm_info: %s", VM_Version::internal_vm_info_string());
+    #ifdef INCLUDE_THIRD_PARTY_HEAP
+    st->print_cr("heap_info: %s", ThirdPartyHeap::version());
+    #endif
     st->cr();
 
   // print a defined marker to show that error handling finished correctly.
