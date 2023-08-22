@@ -235,7 +235,7 @@ private:
   // to the ObjectMonitor reference manipulation code:
   //
   #define OM_OFFSET_NO_MONITOR_VALUE_TAG(f) \
-    ((in_bytes(ObjectMonitor::f ## _offset())) - markWord::monitor_value)
+    ((in_bytes(ObjectMonitor::f ## _offset())) - checked_cast<int>(markWord::monitor_value))
 
   markWord           header() const;
   volatile markWord* header_addr();
@@ -363,6 +363,7 @@ private:
   // Deflation support
   bool      deflate_monitor();
   void      install_displaced_markword_in_object(const oop obj);
+  void      release_object() { _object.release(_oop_storage); _object.set_null(); }
 };
 
 #endif // SHARE_RUNTIME_OBJECTMONITOR_HPP

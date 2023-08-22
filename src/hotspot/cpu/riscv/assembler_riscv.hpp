@@ -271,7 +271,7 @@ class Address {
     return _mode != literal && base() == reg;
   }
 
-  const address target() const {
+  address target() const {
     assert_is_literal();
     return _literal._target;
   }
@@ -1400,7 +1400,6 @@ enum VectorMask {
   // Vector Floating-Point Sign-Injection Instructions
   INSN(vfsgnjx_vv, 0b1010111, 0b001, 0b001010);
   INSN(vfsgnjn_vv, 0b1010111, 0b001, 0b001001);
-  INSN(vfsgnj_vv,  0b1010111, 0b001, 0b001000);
 
   // Vector Floating-Point MIN/MAX Instructions
   INSN(vfmax_vv,   0b1010111, 0b001, 0b000110);
@@ -1552,11 +1551,6 @@ enum VectorMask {
   INSN(vmflt_vf, 0b1010111, 0b101, 0b011011);
   INSN(vmfne_vf, 0b1010111, 0b101, 0b011100);
   INSN(vmfeq_vf, 0b1010111, 0b101, 0b011000);
-
-  // Vector Floating-Point Sign-Injection Instructions
-  INSN(vfsgnjx_vf, 0b1010111, 0b101, 0b001010);
-  INSN(vfsgnjn_vf, 0b1010111, 0b101, 0b001001);
-  INSN(vfsgnj_vf,  0b1010111, 0b101, 0b001000);
 
   // Vector Floating-Point MIN/MAX Instructions
   INSN(vfmax_vf, 0b1010111, 0b101, 0b000110);
@@ -2794,7 +2788,13 @@ public:
       c_slli(Rd, shamt);                                                                     \
       return;                                                                                \
     }                                                                                        \
-    _slli(Rd, Rs1, shamt);                                                                   \
+    if (shamt != 0) {                                                                        \
+      _slli(Rd, Rs1, shamt);                                                                 \
+    } else {                                                                                 \
+      if (Rd != Rs1) {                                                                        \
+        addi(Rd, Rs1, 0);                                                                    \
+      }                                                                                      \
+    }                                                                                        \
   }
 
   INSN(slli);
@@ -2809,7 +2809,13 @@ public:
       C_NAME(Rd, shamt);                                                                     \
       return;                                                                                \
     }                                                                                        \
-    NORMAL_NAME(Rd, Rs1, shamt);                                                             \
+    if (shamt != 0) {                                                                        \
+      NORMAL_NAME(Rd, Rs1, shamt);                                                           \
+    } else {                                                                                 \
+      if (Rd != Rs1) {                                                                        \
+        addi(Rd, Rs1, 0);                                                                    \
+      }                                                                                      \
+    }                                                                                        \
   }
 
   INSN(srai, c_srai, _srai);
