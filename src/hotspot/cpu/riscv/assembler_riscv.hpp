@@ -232,7 +232,7 @@ class Address {
 
   Address(address target, relocInfo::relocType rtype = relocInfo::external_word_type);
 
-  Address(const Address& a) : _mode(a._mode) { copy_data(a); }
+  Address(const Address& a) : _obj_start(a._obj_start), _mode(a._mode) { copy_data(a); }
 
   // Verify the value is trivially destructible regardless of mode, so our
   // destructor can also be trivial, and so our assignment operator doesn't
@@ -242,6 +242,7 @@ class Address {
 
   Address& operator=(const Address& a) {
     _mode = a._mode;
+    _obj_start = a._obj_start;
     copy_data(a);
     return *this;
   }
