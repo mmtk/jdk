@@ -40,7 +40,7 @@ void ModRefBarrierSetAssembler::arraycopy_epilogue(MacroAssembler* masm, Decorat
                                                    Register src, Register dst, Register count, Register tmp,
                                                    RegSet saved_regs) {
   if (is_oop) {
-    gen_write_ref_array_post_barrier(masm, decorators, start, count, tmp, saved_regs);
+    gen_write_ref_array_post_barrier(masm, decorators, dst, count, tmp, saved_regs);
   }
 }
 

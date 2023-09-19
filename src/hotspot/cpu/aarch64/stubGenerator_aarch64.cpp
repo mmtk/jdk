@@ -1583,7 +1583,7 @@ class StubGenerator: public StubCodeGenerator {
       if (VerifyOops)
         verify_oop_array(size, d, count, r16);
     }
-    bs->arraycopy_epilogue(_masm, decorators, is_oop, noreg, d, count, rscratch1, RegSet());
+    bs->arraycopy_epilogue(_masm, decorators, is_oop, s, d, count, rscratch1, RegSet());
     __ leave();
     __ mov(r0, zr); // return 0
     __ ret(lr);
