@@ -1514,7 +1514,7 @@ class StubGenerator: public StubCodeGenerator {
         verify_oop_array(size, d, count, r16);
     }
 
-    bs->arraycopy_epilogue(_masm, decorators, is_oop, noreg, d, count, rscratch1, RegSet());
+    bs->arraycopy_epilogue(_masm, decorators, is_oop, s, d, count, rscratch1, RegSet());
 
     __ leave();
     __ mov(r0, zr); // return 0
@@ -1865,6 +1865,7 @@ class StubGenerator: public StubCodeGenerator {
     const Register copied_oop  = r22;       // actual oop copied
     const Register count_save  = r21;       // orig elementscount
     const Register start_to    = r20;       // destination array start address
+    const Register start_from  = r23;       // source array start address
     const Register r19_klass   = r19;       // oop._klass
 
     // Registers used as gc temps (r5, r6, r7 are save-on-call)
@@ -1904,7 +1905,7 @@ class StubGenerator: public StubCodeGenerator {
 
      // Empty array:  Nothing to do.
     __ cbz(count, L_done);
-    __ push(RegSet::of(r19, r20, r21, r22), sp);
+    __ push(RegSet::of(r19, r20, r21, r22, r23), sp);
 
 #ifdef ASSERT
     BLOCK_COMMENT("assert consistent ckoff/ckval");
@@ -1935,6 +1936,7 @@ class StubGenerator: public StubCodeGenerator {
 
     // Copy from low to high addresses
     __ mov(start_to, to);              // Save destination array start address
+    __ mov(start_from, from);
     __ b(L_load_element);
 
     // ======== begin loop ========
@@ -1975,10 +1977,10 @@ class StubGenerator: public StubCodeGenerator {
     __ br(Assembler::EQ, L_done_pop);
 
     __ BIND(L_do_card_marks);
-    bs->arraycopy_epilogue(_masm, decorators, is_oop, noreg, start_to, count_save, rscratch1, wb_post_saved_regs);
+    bs->arraycopy_epilogue(_masm, decorators, is_oop, start_to, start_from, count_save, rscratch1, wb_post_saved_regs);
 
     __ bind(L_done_pop);
-    __ pop(RegSet::of(r19, r20, r21, r22), sp);
+    __ pop(RegSet::of(r19, r20, r21, r22, r23), sp);
     inc_counter_np(SharedRuntime::_checkcast_array_copy_ctr);
 
     __ bind(L_done);
