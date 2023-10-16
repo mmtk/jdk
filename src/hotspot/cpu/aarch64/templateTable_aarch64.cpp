@@ -1105,6 +1105,7 @@ void TemplateTable::aastore() {
   __ ldr(r3, at_tos_p2()); // array
 
   Address element_address(r3, r4, Address::uxtw(LogBytesPerHeapOop));
+  element_address._obj_start = r3;
 
   index_check(r3, r2);     // kills r1
   __ add(r4, r2, arrayOopDesc::base_offset_in_bytes(T_OBJECT) >> LogBytesPerHeapOop);
@@ -2724,6 +2725,7 @@ void TemplateTable::putfield_or_static(int byte_no, bool is_static, RewriteContr
 
   // field address
   const Address field(obj, off);
+  field._obj_start = obj;
 
   Label notByte, notBool, notInt, notShort, notChar,
         notLong, notFloat, notObj, notDouble;
@@ -2992,7 +2994,8 @@ void TemplateTable::fast_storefield(TosState state)
   pop_and_check_object(r2);
 
   // field address
-  const Address field(r2, r1);
+  Address field(r2, r1);
+  field._obj_start = r2;
 
   // access field
   switch (bytecode()) {
@@ -3558,8 +3561,12 @@ void TemplateTable::_new() {
   //
   //  Go to slow path.
 
-  if (UseTLAB) {
-    __ tlab_allocate(r0, r3, 0, noreg, r1, slow_case);
+  if (UseTLAB || UseThirdPartyHeap) {
+    if (UseTLAB) {
+      __ tlab_allocate(r0, r3, 0, noreg, r1, slow_case);
+    } else {
+      __ eden_allocate(r0, r3, 0, noreg, r1, slow_case);
+    }
 
     if (ZeroTLAB) {
       // the fields have been already cleared

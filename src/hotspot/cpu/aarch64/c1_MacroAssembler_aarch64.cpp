@@ -174,7 +174,11 @@ void C1_MacroAssembler::try_allocate(Register obj, Register var_size_in_bytes, i
   if (UseTLAB) {
     tlab_allocate(obj, var_size_in_bytes, con_size_in_bytes, t1, t2, slow_case);
   } else {
-    b(slow_case);
+    if (UseThirdPartyHeap) { 
+      eden_allocate(obj, var_size_in_bytes, con_size_in_bytes, t1, t2, slow_case);
+    } else {
+      b(slow_case);
+    }
   }
 }
 

@@ -4782,6 +4782,16 @@ void MacroAssembler::tlab_allocate(Register obj,
   bs->tlab_allocate(this, obj, var_size_in_bytes, con_size_in_bytes, t1, t2, slow_case);
 }
 
+void MacroAssembler::eden_allocate(Register obj,
+                                   Register var_size_in_bytes,
+                                  int con_size_in_bytes,
+                                   Register t1,
+                                   Register t2,
+                                   Label& slow_case) {
+  BarrierSetAssembler *bs = BarrierSet::barrier_set()->barrier_set_assembler();
+  bs->eden_allocate(this, obj, var_size_in_bytes, con_size_in_bytes, t1, t2, slow_case);
+}
+
 void MacroAssembler::verify_tlab() {
 #ifdef ASSERT
   if (UseTLAB && VerifyOops) {

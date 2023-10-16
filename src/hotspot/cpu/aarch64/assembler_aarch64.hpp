@@ -343,7 +343,7 @@ class Address {
 
   enum mode { no_mode, base_plus_offset, pre, post, post_reg,
               base_plus_offset_reg, literal };
-
+  Register _obj_start = noreg;
   // Shift and extend for base reg + reg offset addressing
   class extend {
     int _option, _shift;
@@ -464,7 +464,7 @@ class Address {
     }
   }
 
-  Address(const Address& a) : _mode(a._mode) { copy_data(a); }
+  Address(const Address& a) : _obj_start(a._obj_start), _mode(a._mode) { copy_data(a); }
 
   // Verify the value is trivially destructible regardless of mode, so our
   // destructor can also be trivial, and so our assignment operator doesn't
@@ -474,6 +474,7 @@ class Address {
 
   Address& operator=(const Address& a) {
     _mode = a._mode;
+    _obj_start = a._obj_start;
     copy_data(a);
     return *this;
   }
