@@ -304,16 +304,6 @@ public class IRNode {
         beforeMatchingNameRegex(CMOVE_I, "CMoveI");
     }
 
-    public static final String CMOVE_VD = PREFIX + "CMOVE_VD" + POSTFIX;
-    static {
-        superWordNodes(CMOVE_VD, "CMoveVD");
-    }
-
-    public static final String CMOVE_VF = PREFIX + "CMOVE_VF" + POSTFIX;
-    static {
-        superWordNodes(CMOVE_VF, "CMoveVF");
-    }
-
     public static final String CMP_I = PREFIX + "CMP_I" + POSTFIX;
     static {
         beforeMatchingNameRegex(CMP_I, "CmpI");
@@ -804,6 +794,16 @@ public class IRNode {
         superWordNodes(MUL_REDUCTION_VL, "MulReductionVL");
     }
 
+    public static final String MIN_REDUCTION_V = PREFIX + "MIN_REDUCTION_V" + POSTFIX;
+    static {
+        superWordNodes(MIN_REDUCTION_V, "MinReductionV");
+    }
+
+    public static final String MAX_REDUCTION_V = PREFIX + "MAX_REDUCTION_V" + POSTFIX;
+    static {
+        superWordNodes(MAX_REDUCTION_V, "MaxReductionV");
+    }
+
     public static final String NEG_V = PREFIX + "NEG_V" + POSTFIX;
     static {
         beforeMatchingNameRegex(NEG_V, "NegV(F|D)");
@@ -1188,6 +1188,11 @@ public class IRNode {
         beforeMatchingNameRegex(SUB_V, "SubV(B|S|I|L|F|D)");
     }
 
+    public static final String SUBTYPE_CHECK = PREFIX + "SUBTYPE_CHECK" + POSTFIX;
+    static {
+        beforeMatchingNameRegex(SUBTYPE_CHECK, "SubTypeCheck");
+    }
+
     public static final String TRAP = PREFIX + "TRAP" + POSTFIX;
     static {
         trapNodes(TRAP,"reason");
@@ -1276,6 +1281,11 @@ public class IRNode {
     public static final String VECTOR_BLEND = PREFIX + "VECTOR_BLEND" + POSTFIX;
     static {
         beforeMatchingNameRegex(VECTOR_BLEND, "VectorBlend");
+    }
+
+    public static final String VECTOR_MASK_CMP = PREFIX + "VECTOR_MASK_CMP" + POSTFIX;
+    static {
+        beforeMatchingNameRegex(VECTOR_MASK_CMP, "VectorMaskCmp");
     }
 
     public static final String VECTOR_CAST_B2X = PREFIX + "VECTOR_CAST_B2X" + POSTFIX;
@@ -1466,6 +1476,11 @@ public class IRNode {
     public static final String VNOT_L_MASKED = PREFIX + "VNOT_L_MASKED" + POSTFIX;
     static {
         machOnlyNameRegex(VNOT_L_MASKED, "vnotL_masked");
+    }
+
+    public static final String VSTOREMASK_TRUECOUNT = PREFIX + "VSTOREMASK_TRUECOUNT" + POSTFIX;
+    static {
+        machOnlyNameRegex(VSTOREMASK_TRUECOUNT, "vstoremask_truecount_neon");
     }
 
     public static final String XOR = PREFIX + "XOR" + POSTFIX;

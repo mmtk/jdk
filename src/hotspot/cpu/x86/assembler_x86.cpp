@@ -4408,6 +4408,14 @@ void Assembler::evpcmpuw(KRegister kdst, XMMRegister nds, XMMRegister src, Compa
   emit_int24(0x3E, (0xC0 | encode), vcc);
 }
 
+void Assembler::evpcmpuq(KRegister kdst, XMMRegister nds, XMMRegister src, ComparisonPredicate vcc, int vector_len) {
+  assert(VM_Version::supports_avx512vl(), "");
+  InstructionAttr attributes(vector_len, /* rex_w */ true, /* legacy_mode */ false, /* no_mask_reg */ true, /* uses_vl */ true);
+  attributes.set_is_evex_instruction();
+  int encode = vex_prefix_and_encode(kdst->encoding(), nds->encoding(), src->encoding(), VEX_SIMD_66, VEX_OPCODE_0F_3A, &attributes);
+  emit_int24(0x1E, (0xC0 | encode), vcc);
+}
+
 void Assembler::evpcmpuw(KRegister kdst, XMMRegister nds, Address src, ComparisonPredicate vcc, int vector_len) {
   assert(VM_Version::supports_avx512vlbw(), "");
   InstructionMark im(this);
@@ -5886,21 +5894,6 @@ void Assembler::setb(Condition cc, Register dst) {
   assert(0 <= cc && cc < 16, "illegal cc");
   int encode = prefix_and_encode(dst->encoding(), true);
   emit_int24(0x0F, (unsigned char)0x90 | cc, (0xC0 | encode));
-}
-
-void Assembler::sete(Register dst) {
-  int encode = prefix_and_encode(dst->encoding(), true);
-  emit_int24(0x0F, (unsigned char)0x94, (0xC0 | encode));
-}
-
-void Assembler::setl(Register dst) {
-  int encode = prefix_and_encode(dst->encoding(), true);
-  emit_int24(0x0F, (unsigned char)0x9C, (0xC0 | encode));
-}
-
-void Assembler::setne(Register dst) {
-  int encode = prefix_and_encode(dst->encoding(), true);
-  emit_int24(0x0F, (unsigned char)0x95, (0xC0 | encode));
 }
 
 void Assembler::palignr(XMMRegister dst, XMMRegister src, int imm8) {
@@ -12406,18 +12399,9 @@ void Assembler::pusha() { // 32bit
   emit_int8(0x60);
 }
 
-void Assembler::set_byte_if_not_zero(Register dst) {
-  emit_int24(0x0F, (unsigned char)0x95, (0xC0 | dst->encoding()));
-}
-
 #else // LP64
 
 // 64bit only pieces of the assembler
-
-void Assembler::set_byte_if_not_zero(Register dst) {
-  int enc = prefix_and_encode(dst->encoding(), true);
-  emit_int24(0x0F, (unsigned char)0x95, (0xC0 | enc));
-}
 
 // This should only be used by 64bit instructions that can use rip-relative
 // it cannot be used by instructions that want an immediate value.

@@ -69,6 +69,10 @@ compiler/codecache/jmx/PoolsIndependenceTest.java 8264632 macosx-all
 
 compiler/vectorapi/VectorLogicalOpIdentityTest.java 8302459 linux-x64,windows-x64
 
+compiler/c2/irTests/TestVectorConditionalMove.java 8306922 generic-all
+
+compiler/jvmci/TestUncaughtErrorInCompileMethod.java 8309073 generic-all
+
 #############################################################################
 
 # :hotspot_gc
@@ -100,6 +104,7 @@ runtime/ErrorHandling/CreateCoredumpOnCrash.java 8267433 macosx-x64
 runtime/CompressedOops/CompressedClassPointers.java 8305765 generic-all
 runtime/StackGuardPages/TestStackGuardPagesNative.java 8303612 linux-all
 runtime/ErrorHandling/TestDwarf.java 8305489 linux-all
+runtime/ErrorHandling/MachCodeFramesInErrorFile.java 8313315 linux-ppc64le
 
 applications/jcstress/copy.java 8229852 linux-all
 
