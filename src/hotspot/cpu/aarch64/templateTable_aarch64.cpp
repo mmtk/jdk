@@ -2724,7 +2724,7 @@ void TemplateTable::putfield_or_static(int byte_no, bool is_static, RewriteContr
   }
 
   // field address
-  const Address field(obj, off);
+  Address field(obj, off);
   field._obj_start = obj;
 
   Label notByte, notBool, notInt, notShort, notChar,
